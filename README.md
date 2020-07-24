@@ -1,3 +1,6 @@
+* forked from nimfa
+* refactoring for Python 3
+
 Nimfa
 -----
 
