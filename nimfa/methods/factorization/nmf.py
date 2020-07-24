@@ -153,7 +153,7 @@ class Nmf(nmf_std.Nmf_std):
        default convergence is tested each iteration.
     :type test_conv: `int`
     """
-    def __init__(self, V, seed=None, W=None, H=None, rank=30, max_iter=30,
+    def __init__(self, seed=None, rank=30, max_iter=30,
                  min_residuals=1e-5, test_conv=None, n_run=1, callback=None,
                  callback_init=None, track_factor=False, track_error=False,
                  update='euclidean', objective='fro', conn_change=30, **options):

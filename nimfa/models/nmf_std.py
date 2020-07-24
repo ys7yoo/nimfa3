@@ -33,9 +33,14 @@ class Nmf_std(Nmf):
         :type params: `dict`
         """
         self.model_name = "std"
+        self.V = None
+        self.W = None
+        self.H = None
         self.V1 = None
         self.H1 = None
         Nmf.__init__(self, params)
+
+    def check_V(self):
         if sp.isspmatrix(self.V) and (self.V.data < 0).any() or not sp.isspmatrix(self.V) and (self.V < 0).any():
             raise utils.MFError("The input matrix contains negative elements.")
 

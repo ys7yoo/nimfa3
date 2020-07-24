@@ -80,7 +80,27 @@ class Nmf(object):
            model options see documentation of chosen factorization method.
         :type params: `dict`
         """
+        self.V = None
+        self.W = None
+        self.H = None
+        self.V1 = None
+        self.H1 = None
+
         self.__dict__.update(params)
+
+    def __call__(self, V, W=None, H=None):
+        self.setup_matrices(V, W, H)
+
+        self._check_compatibility()
+
+        """Run the specified MF algorithm."""
+        return self.factorize()
+
+    def setup_matrices(self, V, W=None, H=None):
+        self.V = V
+        self.W = W
+        self.H = H
+
         # do not copy target and factor matrices into the program
         if sp.isspmatrix(self.V):
             self.V = self.V.tocsr().astype('d')
@@ -111,11 +131,6 @@ class Nmf(object):
             else:
                 self.H1 = np.asmatrix(self.H1) if self.H1.dtype == np.dtype(
                     float) else np.asmatrix(self.H1, dtype='d')
-        self._compatibility()
-
-    def __call__(self):
-        """Run the specified MF algorithm."""
-        return self.factorize()
 
     def basis(self):
         """Return the matrix of basis vectors. See NMF specific model."""
@@ -572,7 +587,7 @@ class Nmf(object):
                             measure)(idx=idx)
         return summaries
 
-    def _compatibility(self):
+    def _check_compatibility(self):
         """
         Check if chosen seeding method is compatible with chosen factorization
         method or fixed initialization is passed.
@@ -580,6 +595,9 @@ class Nmf(object):
         :param mf_model: The underlying initialized model of matrix factorization.
         :type mf_model: Class inheriting :class:`models.nmf.Nmf`
         """
+
+        self.check_V()
+
         W = self.basis()
         H = self.coef(0)
         H1 = self.coef(1) if self.model_name == 'mm' else None
@@ -591,6 +609,7 @@ class Nmf(object):
             else:
                 self.seed = seeding.fixed.Fixed()
                 self.seed._set_fixed(W=W, H=H, H1=H1)
+
         self.__is_smdefined()
         self.__compatibility()
 

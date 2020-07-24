@@ -19,5 +19,5 @@ __email__ = 'marinka@cs.stanford.edu'
 
 from nimfa import examples
 from nimfa.methods.factorization import *
-from .version import \
-    short_version as __version__, git_revision as __git_version__
+# from .version import \
+#     short_version as __version__, git_revision as __git_version__
